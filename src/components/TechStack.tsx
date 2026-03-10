@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
+import { Environment, Text } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
 import {
   BallCollider,
@@ -11,38 +11,41 @@ import {
   RapierRigidBody,
 } from "@react-three/rapier";
 
-const textureLoader = new THREE.TextureLoader();
-const imageUrls = [
-  "/images/react2.webp",
-  "/images/next2.webp",
-  "/images/node2.webp",
-  "/images/express.webp",
-  "/images/mongo.webp",
-  "/images/mysql.webp",
-  "/images/typescript.webp",
-  "/images/javascript.webp",
+const skills = [
+  "Python", "Pandas", "NumPy", "Scikit-learn",
+  "TensorFlow", "PyTorch", "OpenCV", "FastAPI",
+  "SQL", "Docker", "Git", "Jupyter",
+  "Matplotlib", "Seaborn", "Linux", "REST APIs",
 ];
-const textures = imageUrls.map((url) => textureLoader.load(url));
 
 const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
+const sphereMaterial = new THREE.MeshPhysicalMaterial({
+  color: "#ffffff",
+  emissive: "#ffffff",
+  emissiveIntensity: 0.1,
+  metalness: 0.3,
+  roughness: 0.8,
+  clearcoat: 0.2,
+});
 
-const spheres = [...Array(30)].map(() => ({
+const spheres = [...Array(16)].map((_, i) => ({
   scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+  label: skills[i % skills.length],
 }));
 
 type SphereProps = {
   vec?: THREE.Vector3;
   scale: number;
+  label: string;
   r?: typeof THREE.MathUtils.randFloatSpread;
-  material: THREE.MeshPhysicalMaterial;
   isActive: boolean;
 };
 
 function SphereGeo({
   vec = new THREE.Vector3(),
   scale,
+  label,
   r = THREE.MathUtils.randFloatSpread,
-  material,
   isActive,
 }: SphereProps) {
   const api = useRef<RapierRigidBody | null>(null);
@@ -60,7 +63,6 @@ function SphereGeo({
           -50 * delta * scale
         )
       );
-
     api.current?.applyImpulse(impulse, true);
   });
 
@@ -84,9 +86,18 @@ function SphereGeo({
         receiveShadow
         scale={scale}
         geometry={sphereGeometry}
-        material={material}
-        rotation={[0.3, 1, 1]}
+        material={sphereMaterial}
       />
+      <Text
+        position={[0, 0, scale + 0.1]}
+        fontSize={scale * 0.3}
+        color="black"
+        anchorX="center"
+        anchorY="middle"
+        fontWeight="bold"
+      >
+        {label}
+      </Text>
     </RigidBody>
   );
 }
@@ -151,25 +162,12 @@ const TechStack = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  const materials = useMemo(() => {
-    return textures.map(
-      (texture) =>
-        new THREE.MeshPhysicalMaterial({
-          map: texture,
-          emissive: "#ffffff",
-          emissiveMap: texture,
-          emissiveIntensity: 0.3,
-          metalness: 0.5,
-          roughness: 1,
-          clearcoat: 0.1,
-        })
-    );
-  }, []);
+
+  const materials = useMemo(() => sphereMaterial, []);
 
   return (
     <div className="techstack">
-      <h2> My Techstack</h2>
-
+      <h2>My Techstack</h2>
       <Canvas
         shadows
         gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
@@ -193,7 +191,6 @@ const TechStack = () => {
             <SphereGeo
               key={i}
               {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
               isActive={isActive}
             />
           ))}

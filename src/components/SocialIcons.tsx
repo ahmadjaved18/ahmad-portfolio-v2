@@ -76,7 +76,8 @@ const SocialIcons = () => {
           </a>
         </span>
       </div>
-      
+
+      <a
         className="resume-button"
         href="/Ahmad_Javed_Resume.pdf"
         target="_blank"

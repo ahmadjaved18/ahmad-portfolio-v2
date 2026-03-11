@@ -163,7 +163,6 @@ const TechStack = () => {
     };
   }, []);
 
-  const materials = useMemo(() => sphereMaterial, []);
 
   return (
     <div className="techstack">

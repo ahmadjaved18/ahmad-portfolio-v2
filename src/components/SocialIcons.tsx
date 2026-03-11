@@ -47,7 +47,6 @@ const SocialIcons = () => {
       };
 
       document.addEventListener("mousemove", onMouseMove);
-
       updatePosition();
 
       return () => {
@@ -55,6 +54,9 @@ const SocialIcons = () => {
       };
     });
   }, []);
+
+  // Production-safe PDF path
+  const resumePath = `${process.env.PUBLIC_URL}/Ahmad_Javed_Resume.pdf`;
 
   return (
     <div className="icons-section">
@@ -95,7 +97,7 @@ const SocialIcons = () => {
 
       <a
         className="resume-button"
-        href="/Ahmad_Javed_Resume.pdf"  // ✅ correct PDF path
+        href={resumePath} // ✅ now works on Vercel
         target="_blank"
         rel="noopener noreferrer"
       >

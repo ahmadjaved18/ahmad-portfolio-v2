@@ -6,14 +6,13 @@ const About = () => {
       <div className="about-me">
         <h3 className="title">About Me</h3>
         <p className="para">
-          I'm Ahmad Javed, an AI Engineer passionate about building intelligent
-          systems that solve real-world problems. With hands-on expertise in
-          machine learning, data analysis, and predictive modeling, I specialize
-          in transforming raw data into actionable insights. I work extensively
-          with Python and its ecosystem — including Pandas, NumPy, and
-          Scikit-learn — to design and deploy scalable ML solutions. I thrive at
-          the intersection of data science and software engineering, constantly
-          pushing the boundaries of what's possible with AI.
+          I'm Ahmad Javed, a Software Engineering student with a strong interest
+          in Artificial Intelligence, Machine Learning, and data-driven problem
+          solving. I work with Python and tools such as Pandas, NumPy, and
+          Scikit-learn to analyze data and build practical solutions. I enjoy
+          applying analytical thinking and programming skills to real-world
+          problems while continuously learning and developing my expertise in
+          AI and data science.
         </p>
       </div>
     </div>

@@ -10,14 +10,21 @@ const Loading = ({ percent }: { percent: number }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  if (percent >= 100) {
-    setTimeout(() => {
-      setLoaded(true);
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 1000);
-    }, 600);
-  }
+  useEffect(() => {
+    if (percent >= 100) {
+      const timer1 = setTimeout(() => {
+        setLoaded(true);
+
+        const timer2 = setTimeout(() => {
+          setIsLoaded(true);
+        }, 1000);
+
+        return () => clearTimeout(timer2);
+      }, 600);
+
+      return () => clearTimeout(timer1);
+    }
+  }, [percent]);
 
   useEffect(() => {
     import("./utils/initialFX").then((module) => {
@@ -46,8 +53,9 @@ const Loading = ({ percent }: { percent: number }) => {
     <>
       <div className="loading-header">
         <a href="/#" className="loader-title" data-cursor="disable">
-          Logo
+          AJ
         </a>
+
         <div className={`loaderGame ${clicked && "loader-out"}`}>
           <div className="loaderGame-container">
             <div className="loaderGame-in">
@@ -59,18 +67,23 @@ const Loading = ({ percent }: { percent: number }) => {
           </div>
         </div>
       </div>
+
       <div className="loading-screen">
         <div className="loading-marquee">
           <Marquee>
-            <span> A Creative Developer</span> <span>A Creative Designer</span>
-            <span> A Creative Developer</span> <span>A Creative Designer</span>
+            <span> In the World of AI </span>
+            <span> In the World of AI </span>
+            <span> In the World of AI </span>
+            <span> In the World of AI </span>
           </Marquee>
         </div>
+
         <div
           className={`loading-wrap ${clicked && "loading-clicked"}`}
           onMouseMove={(e) => handleMouseMove(e)}
         >
           <div className="loading-hover"></div>
+
           <div className={`loading-button ${loaded && "loading-complete"}`}>
             <div className="loading-container">
               <div className="loading-content">
@@ -78,8 +91,10 @@ const Loading = ({ percent }: { percent: number }) => {
                   Loading <span>{percent}%</span>
                 </div>
               </div>
+
               <div className="loading-box"></div>
             </div>
+
             <div className="loading-content2">
               <span>Welcome</span>
             </div>
@@ -102,9 +117,11 @@ export const setProgress = (setLoading: (value: number) => void) => {
       setLoading(percent);
     } else {
       clearInterval(interval);
+
       interval = setInterval(() => {
         percent = percent + Math.round(Math.random());
         setLoading(percent);
+
         if (percent > 91) {
           clearInterval(interval);
         }
@@ -120,6 +137,7 @@ export const setProgress = (setLoading: (value: number) => void) => {
   function loaded() {
     return new Promise<number>((resolve) => {
       clearInterval(interval);
+
       interval = setInterval(() => {
         if (percent < 100) {
           percent++;
@@ -131,5 +149,6 @@ export const setProgress = (setLoading: (value: number) => void) => {
       }, 2);
     });
   }
+
   return { loaded, percent, clear };
 };
